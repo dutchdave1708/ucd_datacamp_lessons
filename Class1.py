@@ -7,15 +7,15 @@
 #print(sub)
 #print(div)
 #print(mul)
-5-2
 print(5-2)
 answer = 3**2
 print(answer)
 
 # Completed session 1 on DataCamp ~5 hours // Introduction to Python
+print ('Datacamp 1 - Intro to Python - is completed')
 
-#functions: built in like max(), len() on a list
-#method: functions belong to objects
-#packages : Numpy is a Python package to import, to effiently practise data science
+#Other notes
+print('functions: built in like max(), len() on a list', 'method: functions belong to objects'
+      , 'packages : Numpy is a Python package to import, to effiently practise data science')
 # for example: list named fam.  object.method()  --> fam.index("word3")
 
