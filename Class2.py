@@ -15,11 +15,11 @@ print("session2")
 
 import pandas as pd
 # downloaded the winemag.csv file from Kaggle onto local machine
-
+# load into a dataframe
 df=pd.read_csv("winemag-data-130k-v2.csv")
 
 print(type(df))
 print(df.info())
-print(df)
+print(df.shape)
 
 # finished the Intermediary Python course bar the case study at the end
