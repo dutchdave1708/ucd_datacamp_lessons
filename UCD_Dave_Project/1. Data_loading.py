@@ -7,9 +7,6 @@ import pandas as pd
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
 
-
-
-
 # explore the file
 print('The first 10 rows are...')
 print(df.head(10)) #show 10 rows
