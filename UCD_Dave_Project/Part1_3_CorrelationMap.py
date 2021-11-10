@@ -11,31 +11,32 @@ df = pd.read_csv('Data_files/epi_r.csv')
 # note 2, step-by-step clean up done in Part1_2_Selection.py
 # copying code through here to get ready for analysis.
 
+
 # CLEANUP THE DATA
+# 1. Only work with unique recipes. Keep the first one.
 df_unique = df.drop_duplicates('title', ignore_index=True)  #reset index 0 to n-1
-# 2. drop rows for the drinks recipes
+# 2. drop rows for the drinks recipes, only interested in food.
 df_no_drinks = df_unique[(df_unique['drinks'] ==0) & (df_unique['drink'] == 0)]
-# 3. drop rows with empty values
-df_values = df_no_drinks[df_no_drinks['calories'].notnull()]
-df_values = df_values[df_values['protein'].notnull()]
-df_values = df_values[df_values['fat'].notnull()]
-df_values = df_values[df_values['rating'].notnull()]
-df_values = df_values[df_values['sodium'].notnull()]
-df_values = df_values[df_values['alcoholic'].notnull()]
-df_values = df_values[df_values['vegetarian'].notnull()]
-# Make a selection of columns we care about:
-df_selection = df_values[['title', 'rating', 'calories', 'protein', 'fat', 'sodium', 'alcoholic', 'vegetarian']]
+# 3. Make a selection of columns we care about:
+df_selection = df_no_drinks[['title', 'rating', 'calories', 'protein', 'fat', 'sodium', 'alcoholic', 'vegetarian']]
+# 4. drop rows with empty values
+df_selection = df_selection[df_no_drinks['calories'].notnull()]
+df_selection = df_selection[df_selection['protein'].notnull()]
+df_selection = df_selection[df_selection['fat'].notnull()]
+df_selection = df_selection[df_selection['rating'].notnull()]
+df_selection = df_selection[df_selection['sodium'].notnull()]
+df_selection = df_selection[df_selection['alcoholic'].notnull()]
+df_selection = df_selection[df_selection['vegetarian'].notnull()]
 
 
-# 1 -- Can we find which value is the strongest indicator for rating?
-
+#5. Can we find which value is the strongest indicator for rating?
 correlations_1 = df_selection.corr(method = 'pearson')
 correlations_2 = df_selection.corr(method = 'kendall')
 
 print(correlations_1)
 print(correlations_2)
 
-#Create chart using Seaborn
+#6. Create chart using Seaborn
 title1 = 'Correlations (Pearson) between recipe values'
 title2 = 'Correlations (Kendall) between recipe values'
 sns.heatmap(correlations_1, xticklabels=correlations_1.columns, yticklabels=correlations_1.columns, annot=True
@@ -52,3 +53,4 @@ plt.show()
 # findings with Kendall: no strong correlation, but (in order) Calories, fat, sodium correlate most to Rating
 
 # 2 -- can we predict a rating for a new recipe?
+print('Go to file Part1_4_Prediction.py to see if we can predict a rating')
