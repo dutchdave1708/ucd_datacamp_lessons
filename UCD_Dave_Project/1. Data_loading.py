@@ -3,6 +3,7 @@
 
 # import the relevant packages
 import pandas as pd
+import re
 
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
@@ -49,7 +50,7 @@ print('# of rows after delete = ' + str(unique_rows.shape[0]))
 
 
 
-#show recipes relating to 
+#show recipes relating to
 #1. Diwali
 print ('25 Diwali recipes include: ')
 print(unique_rows.loc[unique_rows['diwali'] == 1])
@@ -72,6 +73,11 @@ print (unique_rows.loc[(unique_rows['christmas'] == 0) & (unique_rows['christmas
 print ('Which christmas recipes are not Christmas Eve recipes?')
 print (unique_rows.loc[(unique_rows['christmas'] == 1) & (unique_rows['christmas eve'] == 0)])
 # 750
+
+#DAVE: to finihs + add some more regular expressions
+print ('Any row with pancakes')
+for title in re.findall("pancake", <<string>>):
+    print(title)
 
 #make a selection of columns to chart:
 print(' SWITCH TO FILE Part1_2_Selection.py')
