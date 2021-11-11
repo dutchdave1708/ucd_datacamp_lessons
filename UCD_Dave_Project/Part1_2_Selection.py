@@ -1,6 +1,8 @@
 # import the relevant packages
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 
 # read the csv
@@ -33,10 +35,19 @@ df_selection = df_selection[df_selection['alcoholic'].notnull()]
 df_selection = df_selection[df_selection['vegetarian'].notnull()]
 print('total rows ex empty:  ' + str(df_selection.count()))
 
+#5a Create chart to map calories to ratings, see if there is a normal range
+plt.scatter(df_selection['rating'], df_selection['calories'])
+plt.scatter(df_selection['rating'], df_selection['sodium'])
+plt.title('Calorie / Sodium values outliers?')
+plt.ylabel('Calories & Sodium')
+plt.xlabel('Rating')
+plt.show()
+# certainly some outliers
 #5. futher clean up. Find mean of rating
 print(df_selection.info())
 print('Original file, pre-processed, rating avg:  ' + str(df['rating'].mean()))
 print('File post processing, avg rating:  ' + str(df_selection['rating'].mean()))
+
 print('Min & max values for key columns: calories, fat, sodium, protein')
 print('Min& Max for calories: ' + str(df_selection.calories.max()) + ' , ' + str(df_selection.calories.min()))
 print('Min& Max for sodium: ' + str(df_selection.sodium.max()) + ' , ' + str(df_selection.sodium.min()))
@@ -53,7 +64,16 @@ df_selection2 = df_selection2[np.abs(df_selection2.protein - df_selection2.prote
 #NOTE - i had also removed the ones where calories is too low, but on reflection those are valid numbers
 #df_selection2 = df_selection2[~(np.abs(df_selection2.calories - df_selection2.calories.mean()) > (3 * df_selection2.calories.std()))]
 
-#DAVE: need to convert this into a loop.
+
+# now check again with same cahrts
+plt.scatter(df_selection2['rating'], df_selection2['calories'])
+plt.scatter(df_selection2['rating'], df_selection2['sodium'])
+plt.title('Calorie / Sodium values outliers?')
+plt.ylabel('Calories & Sodium')
+plt.xlabel('Rating')
+plt.show()
+
+# much better distribution of values. Probbaly still some bad data, but less impactful.
 
 print('Dataframe info post cleanup')
 print(df_selection2.info())
@@ -63,7 +83,10 @@ print('Mean for Sodium, before removing outliers:  ' + str(df_selection['sodium'
 print('Mean for fat, before removing outliers:  ' + str(df_selection['fat'].mean()) + ' after: ' + str(df_selection2['fat'].mean()))
 print('Mean for Protein, before removing outliers:  ' + str(df_selection['protein'].mean()) + ' after: ' + str(df_selection2['protein'].mean()))
 
-
+print('..and lastly, how the rating has evolved during cleanups')
+print('Original: ' + "{:.2f}".format((df['rating'].mean())) + ' Unique: ' +
+        "{:.2f}".format((df_unique['rating'].mean())) + ' No Nulls: ' + "{:.2f}".format((df_selection['rating'].mean())) +
+        ' NoOutliers: ' + "{:.2f}".format((df_selection2['rating'].mean())))
 
 # Can we find which value is the strongest indicator for rating?
 # can we predict a rating for a new recipe?

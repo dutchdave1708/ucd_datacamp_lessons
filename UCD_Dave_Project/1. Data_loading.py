@@ -75,11 +75,11 @@ print (unique_rows.loc[(unique_rows['christmas'] == 1) & (unique_rows['christmas
 # 750
 
 #DAVE: to finihs + add some more regular expressions
-print ('Any row with pancakes')
-for title in re.findall("pancake", <<string>>):
-    print(title)
+print ('How many recipes with pancakes')
+pancakes = unique_rows.loc[unique_rows['title'].str.contains("pancake", case=False)]
+print (pancakes)
 
-#make a selection of columns to chart:
+#do more analytics:
 print(' SWITCH TO FILE Part1_2_Selection.py')
 
 

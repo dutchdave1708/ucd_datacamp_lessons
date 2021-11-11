@@ -3,9 +3,6 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 import numpy as np
-from scipy import stats
-
-
 
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
@@ -46,13 +43,14 @@ correlations_2 = df_selection.corr(method = 'kendall')
 
 correlations_1_2 = df_selection2.corr(method = 'pearson')
 correlations_2_2 = df_selection2.corr(method = 'kendall')
+# seeing the different in correlation values before and after removing outliers.
 print(correlations_1)
 print(correlations_1_2)
 print(correlations_2)
 print(correlations_2_2)
 
 
-#6. Create chart using Seaborn
+#6. Create chart using Seaborn. Using data without outliers.
 title1 = 'Correlations (Pearson) between recipe values'
 title2 = 'Correlations (Kendall) between recipe values'
 sns.heatmap(correlations_1_2, xticklabels=correlations_1.columns, yticklabels=correlations_1.columns, annot=True
