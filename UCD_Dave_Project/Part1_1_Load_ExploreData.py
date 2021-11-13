@@ -40,7 +40,7 @@ print(df.banana.describe()) # gives various info on that column. depends on type
 
 # drop duplicate of title, keep the first only
 print('# of rows before = '+ str(df.shape[0]))
-unique_rows = df.drop_duplicates('title', ignore_index=True)  #reset index 0 to n-1
+unique_rows = df.drop_duplicates('title', ignore_index=True)  #to reset index 0 to n-1
 print (unique_rows)
 print('# of rows after delete = ' + str(unique_rows.shape[0]))
 
