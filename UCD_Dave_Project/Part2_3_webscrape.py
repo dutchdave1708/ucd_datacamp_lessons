@@ -47,48 +47,12 @@ Wikipedia_Pannekoek = BeautifulSoup(Dutch_Pancake, features="html.parser")
 
 #4 extract title from another website
 title_test = BeautifulSoup(urlopen("https://stackoverflow.com/questions/14694482/converting-html-to-text-with-python"), features="html.parser")
-print('title of website is: ' + title_test.title.string)
+print('title of another website, just for trying, is: ' + title_test.title.string)
 
 # 4. Using regex to extract urls ending in .org
+#text = '<p>Contents :</p><a href="https://w3resource.com">Python Examples</a><a href="http://github.com">Even More Examples</a>'
+urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', html_of_page)
+print("The urls on the Wikipedia page are: ",urls)
 
 
 
-#regex = r'https(\w*)</title>'  #
-#titleonpage = re.findall('https', html_of_page)
-#print(titleonpage)
-
-#answer  = re.split(r"!","Nice place! We should come back!")
-#print(answer)
-
-#answer = re.findall(r"User\d","The winners are:User9,UserN,User8")
-#print(answer)
-
-#answer = re.findall(r"User\D","The winners are:User9,UserN,User8")
-#print(answer)
-
-#answer = re.findall(r"User\w","The winners are:User9,UserN,User8")
-#had to replace d with w from the slide text
-#print(answer)
-
-#answer = re.findall(r"\W\d","The price is:$1,$2,$3")
-#had to replace " at the start, error copying from slide
-#print(answer)
-
-#answer = re.findall(r"Data\s{3}Science","This is Data   Science")
-# added 3 spaces. use either \s\s\s or \s{3}
-#print(answer)
-
-#answer = re.sub(r"ice\Scream","ice cream","I like ice cream")
-#print(answer)
-
-#answer = re.findall(r"colou?r", "This is my color. Love this colour")  #change from capital Colour from slides
-#print(answer)
-
-#answer = re.findall(r"@\w*", "This is @John$")  #needs to be lower case w
-#print(answer)
-
-#answer = re.findall(r"\d+-\d+", "start: 4-3, registration: 10-04")
-#print(answer)
-
-#answer = re.findall(r"\+\d{3}-\d{5}\s\d{4}", "+353-98765 4321" )
-#print(answer)
