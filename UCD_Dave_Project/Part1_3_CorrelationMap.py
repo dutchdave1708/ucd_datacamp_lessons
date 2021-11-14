@@ -27,10 +27,10 @@ for columnheader in columnheaders:
         df_selection = df_selection[df_selection[columnheader].notnull()]
 
 columnheaders = ['calories', 'sodium', 'fat', 'protein']  #not title
-
+df_selection2 = df_selection #create copy to enable before/after comparison later
 # We have to remove outliers in calories, using standard approach with 3 deviation from mean
 for columnheader in columnheaders:
-    df_selection2 = df_selection[np.abs(df_selection[columnheader] - df_selection[columnheader].mean()) <= (3 * df_selection[columnheader].std())]
+    df_selection2 = df_selection2[np.abs(df_selection2[columnheader] - df_selection2[columnheader].mean()) <= (3 * df_selection2[columnheader].std())]
 
 #5. Can we find which value is the strongest indicator for rating?
 correlations_1 = df_selection.corr(method = 'pearson')

@@ -23,38 +23,27 @@ df_unique = df.drop_duplicates('title', ignore_index=True)  #reset index 0 to n-
 df_no_drinks = df_unique[(df_unique['drinks'] ==0) & (df_unique['drink'] == 0)]
 # 3. Drop all rows with empty colums
 df_selection = df_no_drinks.dropna()#[['title', 'rating', 'calories', 'protein', 'fat', 'sodium', 'alcoholic', 'vegetarian']]
-# 4. drop rows with empty values
-#df_selection = df_selection[df_selection['calories'].notnull()]
-#df_selection = df_selection[df_selection['protein'].notnull()]
-#df_selection = df_selection[df_selection['fat'].notnull()]
-#df_selection = df_selection[df_selection['rating'].notnull()]
-#df_selection = df_selection[df_selection['sodium'].notnull()]
-#df_selection = df_selection[df_selection['alcoholic'].notnull()]
-#df_selection = df_selection[df_selection['vegetarian'].notnull()]
-
-# remove outliers > mean+3stdv
+# 4. remove outliers > mean+3stdv
 # We have to remove outliers in calories, using standard approach with 3 deviation from mean
-df_selection2 = df_selection[np.abs(df_selection.calories - df_selection.calories.mean()) <= (3 * df_selection.calories.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.sodium - df_selection2.sodium.mean()) <= (3 * df_selection2.sodium.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.fat - df_selection2.fat.mean()) <= (3 * df_selection2.fat.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.protein - df_selection2.protein.mean()) <= (3 * df_selection2.protein.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.alcoholic - df_selection2.alcoholic.mean()) <= (3 * df_selection2.alcoholic.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.vegetarian - df_selection2.vegetarian.mean()) <= (3 * df_selection2.vegetarian.std())]
+columnheaders = ['calories', 'sodium', 'fat', 'protein']  #not title
+for columnheader in columnheaders:
+    df_selection = df_selection[np.abs(df_selection[columnheader] - df_selection[columnheader].mean()) <= (3 * df_selection[columnheader].std())]
 
 print('Data processing done')
+print('total rows ex drinks: '+ str(df_selection.title.count()))
 
-#predicting ratings: this will be a regression problem
-# target value = number of calories
-#First: create chart with regression line
+#predicting ratings: this will be a regression problem (not a categorisation problem)
+# Target value = number of calories
+# First: create chart with regression line
 
-#1 - drop the Target
-X = df_selection2.drop('rating', axis =1).values
-X = df_selection2.drop('title', axis=1).values  #cant work with strings
-#2 - create target
-y = df_selection2['rating'].values
+#Step 1 - drop the Target
+X = df_selection.drop('calories', axis =1).values
+X = df_selection.drop('title', axis=1).values  #cant work with strings
+#Step 2 - create Target
+y = df_selection['calories'].values
 
-print(X)
-print(y)
+print(type(X))
+print(type(y))
 
 #first, predict calories based on fat
 X_fat = X[:,4]
@@ -83,7 +72,7 @@ plt.ylabel('Calorie values in recipe')
 plt.xlabel('Fat values in recipe')
 plt.show()
 
-# Next step: using test & train data to calculte R^2
+# Next step: using test & train data to calculate R^2
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
 reg_all = LinearRegression()
 reg_all.fit(X_train, y_train)
