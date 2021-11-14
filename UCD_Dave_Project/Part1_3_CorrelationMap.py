@@ -20,22 +20,17 @@ df_no_drinks = df_unique[(df_unique['drinks'] ==0) & (df_unique['drink'] == 0)]
 # 3. Make a selection of columns we care about:
 df_selection = df_no_drinks[['title', 'rating', 'calories', 'protein', 'fat', 'sodium', 'alcoholic', 'vegetarian']]
 # 4. drop rows with empty values
-df_selection = df_selection[df_selection['calories'].notnull()]
-df_selection = df_selection[df_selection['protein'].notnull()]
-df_selection = df_selection[df_selection['fat'].notnull()]
-df_selection = df_selection[df_selection['rating'].notnull()]
-df_selection = df_selection[df_selection['sodium'].notnull()]
-df_selection = df_selection[df_selection['alcoholic'].notnull()]
-df_selection = df_selection[df_selection['vegetarian'].notnull()]
+columnheaders = df_selection.columns.tolist()
+# iterate through list to remove Null
+for columnheader in columnheaders:
+        #print(columnheader)
+        df_selection = df_selection[df_selection[columnheader].notnull()]
+
+columnheaders = ['calories', 'sodium', 'fat', 'protein']  #not title
 
 # We have to remove outliers in calories, using standard approach with 3 deviation from mean
-df_selection2 = df_selection[np.abs(df_selection.calories - df_selection.calories.mean()) <= (3 * df_selection.calories.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.sodium - df_selection2.sodium.mean()) <= (3 * df_selection2.sodium.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.fat - df_selection2.fat.mean()) <= (3 * df_selection2.fat.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.protein - df_selection2.protein.mean()) <= (3 * df_selection2.protein.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.alcoholic - df_selection2.alcoholic.mean()) <= (3 * df_selection2.alcoholic.std())]
-df_selection2 = df_selection2[np.abs(df_selection2.vegetarian - df_selection2.vegetarian.mean()) <= (3 * df_selection2.vegetarian.std())]
-
+for columnheader in columnheaders:
+    df_selection2 = df_selection[np.abs(df_selection[columnheader] - df_selection[columnheader].mean()) <= (3 * df_selection[columnheader].std())]
 
 #5. Can we find which value is the strongest indicator for rating?
 correlations_1 = df_selection.corr(method = 'pearson')
@@ -71,4 +66,4 @@ plt.show()
 #plt.show()
 
 # 7 -- can we predict a rating for a new recipe?
-print('Go to file Part1_4_Prediction.py to see if we can predict a rating')
+print('Go to file Part1_4_Prediction.py for the next part')

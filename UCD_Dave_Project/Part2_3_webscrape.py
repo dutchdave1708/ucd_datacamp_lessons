@@ -24,8 +24,13 @@ response.close()
 # 0. start simple: find all Pannekoek and pancake
 answer = re.findall(r"pannekoek", html_of_page)
 print(answer)
+
 answer = re.findall(r"pancake", html_of_page)
 print(answer)
+
+
+#answer is a list
+
 
 html_of_page_NL = html_of_page.replace('pancake','Mighty Dutch pannekoek').replace('pancakes','Mighty Dutch Pannekoeken')
 #print(html_of_page_NL)
