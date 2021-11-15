@@ -7,6 +7,9 @@ import numpy as np
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
 
+# set Number of standarddeviations for taking outliers
+nrstd = 2  #default is 3, but trying different values.
+
 # note 1, the basic dataset evaluation is done in the Part1_1_Load_ExploreData.py
 # note 2, step-by-step clean up done in Part1_2_Selection.py
 # copying code through here to get ready for analysis.
@@ -30,7 +33,7 @@ columnheaders = ['calories', 'sodium', 'fat', 'protein']  #not title
 df_selection2 = df_selection #create copy to enable before/after comparison later
 # We have to remove outliers in calories, using standard approach with 3 deviation from mean
 for columnheader in columnheaders:
-    df_selection2 = df_selection2[np.abs(df_selection2[columnheader] - df_selection2[columnheader].mean()) <= (3 * df_selection2[columnheader].std())]
+    df_selection2 = df_selection2[np.abs(df_selection2[columnheader] - df_selection2[columnheader].mean()) <= (nrstd * df_selection2[columnheader].std())]
 
 #5. Can we find which value is the strongest indicator for rating?
 correlations_1 = df_selection.corr(method = 'pearson')
