@@ -35,6 +35,12 @@ df_selection2 = df_selection #create copy to enable before/after comparison late
 for columnheader in columnheaders:
     df_selection2 = df_selection2[np.abs(df_selection2[columnheader] - df_selection2[columnheader].mean()) <= (nrstd * df_selection2[columnheader].std())]
 
+#what if we run that twice?  (as after first run, the range will be more narrow and with a lower mean
+for columnheader in columnheaders:
+    df_selection2 = df_selection2[np.abs(df_selection2[columnheader] - df_selection2[columnheader].mean()) <= (nrstd * df_selection2[columnheader].std())]
+
+# better result with running it twice.
+
 #5. Can we find which value is the strongest indicator for rating?
 correlations_1 = df_selection.corr(method = 'pearson')
 correlations_2 = df_selection.corr(method = 'kendall')

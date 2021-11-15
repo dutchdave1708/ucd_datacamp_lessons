@@ -6,6 +6,9 @@ import matplotlib.pyplot as plt
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
 
+# variable for later / number of standarddeviations
+nrstd = 3
+
 # note, the basic dataset evaluation is done in the other file
 
 # CLEANUP THE DATA
@@ -33,11 +36,14 @@ for columnheader in columnheaders:
 
 print('total rows ex empty values-rows:  ' + str(df_selection.count()))
 
-#5a Create chart to map calories to ratings, see if there is a normal range
-plt.scatter(df_selection['rating'], df_selection['calories'])
-plt.scatter(df_selection['rating'], df_selection['sodium'])
-plt.title('Calorie / Sodium values outliers?')
-plt.ylabel('Calories & Sodium')
+# Sodium is in milligram instead of grams, so divide by 1000
+df_selection['sodium'] = df_selection['sodium'].div(1000).round(2)
+
+#5a Create chart to map fat & protein to ratings, see if there is a normal range
+plt.scatter(df_selection['rating'], df_selection['fat'])
+plt.scatter(df_selection['rating'], df_selection['protein'])
+plt.title('Fat / Protein values outliers?')
+plt.ylabel('Fat & Protein')
 plt.xlabel('Rating')
 plt.show()
 
@@ -66,17 +72,21 @@ for columnheader in columnheaders:
 Column_cleanup = ['calories', 'sodium', 'fat', 'protein']
 
 for X in Column_cleanup:
-    df_selection2 = df_selection[np.abs(df_selection[X] - df_selection[X].mean()) <= (3 * df_selection[X].std())]
+    df_selection2 = df_selection[np.abs(df_selection[X] - df_selection[X].mean()) <= (nrstd * df_selection[X].std())]
 
 #NOTE - i had also removed the ones where calories is too low (ie abs delta more than 3*-std), but on reflection those are valid numbers
 #df_selection2 = df_selection2[~(np.abs(df_selection2.calories - df_selection2.calories.mean()) > (3 * df_selection2.calories.std()))]
 
+#what if we run that twice?  (as after first run, the range will be more narrow and with a lower mean
+for columnheader in Column_cleanup:
+    df_selection2 = df_selection2[np.abs(df_selection2[columnheader] - df_selection2[columnheader].mean()) <= (nrstd * df_selection2[columnheader].std())]
+
 
 # now check again with same charts
-plt.scatter(df_selection2['rating'], df_selection2['calories'])
-plt.scatter(df_selection2['rating'], df_selection2['sodium'])
-plt.title('Calorie / Sodium values outliers?')
-plt.ylabel('Calories & Sodium')
+plt.scatter(df_selection2['rating'], df_selection2['fat'])
+plt.scatter(df_selection2['rating'], df_selection2['protein'])
+plt.title('Fat / Protein values outliers?')
+plt.ylabel('Fat & Protein')
 plt.xlabel('Rating')
 plt.show()
 
