@@ -27,8 +27,6 @@ print(answer)
 
 answer = re.findall(r"pancake", html_of_page)
 print(answer)
-
-
 #answer is a list
 
 
@@ -53,6 +51,18 @@ print('title of another website, just for trying, is: ' + title_test.title.strin
 #text = '<p>Contents :</p><a href="https://w3resource.com">Python Examples</a><a href="http://github.com">Even More Examples</a>'
 urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', html_of_page)
 print("The urls on the Wikipedia page are: ",urls)
+
+#Explaining the regex
+#http[s is optional]://
+#then a group which can be repeated as often as possible
+# group contains multiple 'OR' subsets
+# [a-zA-Z] = all letters
+# [0-9] = all numbers
+# [$-_@.&+] = range of $ - _ @ . & +  possible special characters in urls
+# % = % and then followed by letters or numbers.
+# [!*\(\),] = range of ! * ( ) ,
+# ?: means () are non-capturing
+# + means it is 'greedy'
 
 
 
