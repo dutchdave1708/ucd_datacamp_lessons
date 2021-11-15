@@ -12,6 +12,9 @@ from sklearn.model_selection import cross_val_score
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
 
+# set Number of standarddeviations for taking outliers
+nrstd = 2  #default is 3, but trying different values.
+
 # note 1, the basic dataset evaluation is done in the Part1_1_Load_ExploreData.py
 # note 2, step-by-step clean up done in Part1_2_Selection.py
 # note 3, some data processing, analysis and correlation visualisation done in Part1_3_CorrelationMap.py
@@ -27,7 +30,13 @@ df_selection = df_no_drinks.dropna()#[['title', 'rating', 'calories', 'protein',
 # We have to remove outliers in calories, using standard approach with 3 deviation from mean
 columnheaders = ['calories', 'sodium', 'fat', 'protein']  #not title
 for columnheader in columnheaders:
-    df_selection = df_selection[np.abs(df_selection[columnheader] - df_selection[columnheader].mean()) <= (3 * df_selection[columnheader].std())]
+    df_selection = df_selection[np.abs(df_selection[columnheader] - df_selection[columnheader].mean()) <= (nrstd * df_selection[columnheader].std())]
+#late addition: better results when running this twice as lower mean after first run.
+for columnheader in columnheaders:
+    df_selection = df_selection[np.abs(df_selection[columnheader] - df_selection[columnheader].mean()) <= (nrstd * df_selection[columnheader].std())]
+
+#late addition: turn sodium milligrams into grams
+df_selection['sodium'] = df_selection['sodium'].div(1000).round(2)
 
 print('Data processing done')
 print('total rows ex drinks: '+ str(df_selection.title.count()))

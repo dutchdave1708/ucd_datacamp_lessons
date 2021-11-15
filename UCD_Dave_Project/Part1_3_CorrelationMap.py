@@ -75,4 +75,4 @@ plt.show()
 #plt.show()
 
 # 7 -- can we predict a rating for a new recipe?
-print('Go to file Part1_4_Prediction.py for the next part')
+print('Go to file Part1_4_Regression.py for the next part')
