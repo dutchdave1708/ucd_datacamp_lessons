@@ -18,7 +18,7 @@ from sqlalchemy import Table, Column, Integer, String, MetaData
 # database: sql4450835
 
 # create DB connection details
-engine = create_engine('mysql://sql4450835:69RIi1YeYI@sql4.freesqldatabase.com/sql4450835')
+engine = create_engine('mysql://sql4450835:<<password_not_in_script>>@sql4.freesqldatabase.com/sql4450835')
 connection = engine.connect()
 
 #create SQL statement to execute
