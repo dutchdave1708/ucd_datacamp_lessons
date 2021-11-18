@@ -139,6 +139,18 @@ plt.xlabel("Weighted votes")
 plt.title("Best movies as per weighted votes")
 plt.show()
 
+#chart vote weighted and foreign movies
+df_notenglishmovies = df_movies2.loc[df_movies2['spoken_languages'].str.contains('English', case = False) == False]
+df_notenglishmovies.sort_values('vote_weighted', ascending=False, inplace=True)
+plt.figure(figsize=(12,4))
+plt.barh(df_notenglishmovies['title'].head(6), df_notenglishmovies['vote_weighted'].head(6), align='center', color='green')
+plt.gca().invert_yaxis()  #flip to horizontal bars instead of vertical
+plt.xlabel("Weighted votes")
+plt.title("Non-english movies as per weighted votes")
+plt.show()
+
+#print(df_notenglishmovies['original_title'])
+
 revenue = df_movies2.sort_values('revenue', ascending=False)
 plt.figure(figsize=(12,4))
 plt.barh(revenue['title'].head(6), revenue['revenue'].head(6), align='center', color='blue')
@@ -146,6 +158,17 @@ plt.gca().invert_yaxis()
 plt.xlabel("Revenue ($)")
 plt.title("Highest revenue movies")
 plt.show()
+
+# 5.5 Which movies have biggest difference weighted/non-weighted
+# calculate weighting, add to df
+df_movies2['delta'] = abs(df_movies2['vote_average'] - df_movies2['vote_weighted'])
+#sort
+df_movies2.sort_values('delta', ascending=False, inplace=True)
+print(df_movies2[['title','delta', 'vote_weighted','vote_average','vote_count']].to_string(index=False,max_rows=10))
+
+#df_movies2.sort_values('vote_weighted', ascending=False, inplace=True)
+#print(df_movies2[['title','delta', 'vote_weighted','vote_average','vote_count']].to_string(index=False,max_rows=10))
+
 
 ### the difficult bit #####
 # Making recommendations, based on movie descriptions and other info
