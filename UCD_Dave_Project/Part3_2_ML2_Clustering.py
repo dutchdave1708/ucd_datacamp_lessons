@@ -56,7 +56,28 @@ plt.scatter(xs, ys, c=label)
 plt.scatter(centroids[:,2] , centroids[:,12] , marker='D', s = 100, color = 'red') #NOTE: use same columns here of course
 plt.show()
 
+#STEP 4: measure inertia
+ks = range(1, 10)
+inertias = []
 
+for k in ks:
+    # Create a KMeans instance with k clusters: model
+    model = KMeans(n_clusters=k)
+
+    # Fit model to samples
+    model.fit(np_samples)
+
+    # Append the inertia to the list of inertias
+    inertias.append(model.inertia_)
+
+# Plot ks vs inertias
+plt.plot(ks, inertias, '-o')
+plt.xlabel('number of clusters, k')
+plt.ylabel('inertia')
+plt.xticks(ks)
+plt.show()
+
+#NOTE, looking at chart, at 'the elbow', 3 or 4 clusters is probably best
 #if you have new data set: apply model to new datasets
 
 #new_labels = model.predict(new_samples)
