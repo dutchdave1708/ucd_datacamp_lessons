@@ -60,7 +60,7 @@ df_movies2 = df_movies2.loc[df_movies2['vote_count'] > 200]
 
 #4 - Charting..
 #4.1 chart on distribution of number of votes
-df_movies2['vote_count'].plot.hist(bins=500)
+df_movies2['vote_count'].plot.hist(bins=500)  # a lot of bins  otherwise chart is useless
 plt.xlabel("Number of votes")
 plt.ylabel("Number of movies in that bin")
 plt.title("Number of vote Distribution")
@@ -187,13 +187,12 @@ print(df_movies2[['title','delta', 'vote_weighted','vote_average','vote_count']]
 tfidf = TfidfVectorizer(stop_words='english')
 # STEP 1.2: Replace NaN with an empty string
 df_movies['overview'] = df_movies['overview'].fillna('')
-# STEP 1.3: Apply the vectorisation on overview column
+# STEP 1.3: Fit the vectorisation on overview column
 tfidf_matrix = tfidf.fit_transform(df_movies['overview'])
 
-# Lets see the output
-print(tfidf_matrix.shape)
-#--> 2567 rows by 14662 columns
-
+# Lets see the shape
+#print(tfidf_matrix.shape)
+# note all the additional columns in the matrix with values
 
 # STEP 2 - Compute the cosine similarity matrix
 # this is a standard logic to give an assessment of how similar to pieces of text are
