@@ -15,6 +15,7 @@ df_samples = pd.read_csv('Data_files/Wine.csv')
 #STEP 1 - Histogram of all measures to observe any particular strange things
 #.... and just'to try'
 #1.1 create the canvas for the charts
+## NOTE- COMMENTED OUT TO SPEED UP SCRIPT IN SUBSEQUENT EXECUTIONS ##
     ##fig, axes = plt.subplots(ncols=3,nrows=5, figsize=(12,10))
     #1.2 Fix error -AttributeError: 'numpy.ndarray' object has no attribute 'get_figure'
     ##axe = axes.ravel()
@@ -79,6 +80,8 @@ plt.show()
 
 #NOTE, looking at chart, at 'the elbow', 3 or 4 clusters is probably best
 #if you have new data set: apply model to new datasets
+
+#print(df_samples[3:])
 
 #new_labels = model.predict(new_samples)
 #print(new_labels)
