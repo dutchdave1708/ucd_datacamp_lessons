@@ -31,7 +31,7 @@ for columnheader in columnheaders:
 #late addition: turn sodium milligrams into grams
 df_selection['sodium'] = df_selection['sodium'].div(1000).round(2)
 
-#labels in deperate df for later
+#labels in seperate df for later
 df_labels = df_selection['title']
 df_labels.reset_index(drop=True, inplace=True)
 df_labels50 = df_labels.head(50)
@@ -56,4 +56,5 @@ dendrogram(mergings,
            leaf_rotation=90,
            leaf_font_size=6,
 )
+plt.title('Dendrogram for recipes')
 plt.show()
