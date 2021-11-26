@@ -12,6 +12,7 @@
 # STEP 0 - Import relevant libraries
 import pandas as pd
 import matplotlib.pyplot as plt
+import seaborn as sns
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import linear_kernel
 
@@ -24,23 +25,23 @@ movie_title = 'Spectre' #Quantum of Solace / Spectre / The Lone Ranger /
 df_movies = pd.read_csv('Data_files/Imdb_movies.csv')
 df_addtl_info = pd.read_csv('Data_files/Imdb_movie_credits.csv')
 
+# 1.2 - merge datasets and rename some columns for ease later
 df_addtl_info = df_addtl_info.rename(columns={'movie_id':'id'})
 df_movies2 = df_movies.merge(df_addtl_info, on='id')
 df_movies2.rename(columns={'title_x':'title'}, inplace=True)  #duplicate column, so rename and delete title_y
 df_movies2.drop('title_y', inplace=True, axis=1)  #notice the use of INPLACE .. should have known that before!
 df_movies2 = df_movies2.drop_duplicates(subset=['title'], keep='first')  #remove duplicate title
 
-#list all columns so we know what is there exactly
-    #for col in df_movies2.columns:
-    #    print(col)
+# 1.3 list all columns so we know what is there exactly
+#for col in df_movies2.columns:
+ #       print(col)
 
-#print(df_movies2.head())
-#print(df_movies['spoken_languages'])
+#STEP 2 - Some  exploring of the data
 
-#STEP 2 - Some light exploring of the data
 #2.1..out of interest... any movies with Dutch? --> 10 only!
 df_dutchmovies = df_movies2.loc[df_movies2['spoken_languages'].str.contains('Nederlands', case = False)]
-#print(df_dutchmovies['original_title'])
+print('movies with Dutch language: ')
+print(df_dutchmovies['original_title'])
 
 #2.2...movies with other languages? --> 318 (about 8%)
 df_notenglishmovies = df_movies2.loc[df_movies2['spoken_languages'].str.contains('English', case = False) == False]
@@ -60,7 +61,7 @@ df_movies2 = df_movies2.loc[df_movies2['vote_count'] > 200]
 
 #4 - Charting..
 #4.1 chart on distribution of number of votes
-df_movies2['vote_count'].plot.hist(bins=500)  # a lot of bins  otherwise chart is useless
+df_movies2['vote_count'].plot.hist(bins=500)  # trial&error on nr of  bins, otherwise chart is useless
 plt.xlabel("Number of votes")
 plt.ylabel("Number of movies in that bin")
 plt.title("Number of vote Distribution")
@@ -104,14 +105,9 @@ plt.ylabel("Number of movies in that bin")
 plt.title("Weighted vote distribution")
 plt.show()
 
-#5.4 sort in order by weighted vote
-
-
-print(df_movies2[['title', 'vote_weighted', 'vote_average']])
+#5.4 Chart in order by weighted vote
 # Print top 10 movies
 # print(df_movies2[['title', 'vote_count', 'vote_average', 'vote_weighted']].head(10))
-
-#pop = df.sort_values('popularity', ascending=False)
 popularity = df_movies2.sort_values('popularity', ascending=False)
 plt.figure(figsize=(12,4))
 plt.barh(popularity['title'].head(6), popularity['popularity'].head(6), align='center', color='orange')
@@ -120,7 +116,7 @@ plt.xlabel("Popularity")
 plt.title("Most popular movies")
 plt.show()
 
-#chart Vote - Unweighted
+#5.5 chart Vote - Unweighted
 df_movies2.sort_values('vote_average', ascending=False, inplace=True)
 plt.figure(figsize=(12,4))
 plt.barh(df_movies2['title'].head(6), df_movies2['vote_average'].head(6), align='center', color='green')
@@ -129,8 +125,7 @@ plt.xlabel("AVG unweighted votes")
 plt.title("Best movies as per vote avg, min 200 votes")
 plt.show()
 
-#chart vote_weighted
-
+#5.6 chart vote_weighted
 df_movies2.sort_values('vote_weighted', ascending=False, inplace=True)
 plt.figure(figsize=(12,4))
 plt.barh(df_movies2['title'].head(6), df_movies2['vote_weighted'].head(6), align='center', color='green')
@@ -139,7 +134,7 @@ plt.xlabel("Weighted votes")
 plt.title("Best movies as per weighted votes")
 plt.show()
 
-#chart vote weighted and foreign movies
+#5.7 chart vote weighted and foreign movies
 df_notenglishmovies = df_movies2.loc[df_movies2['spoken_languages'].str.contains('English', case = False) == False]
 df_notenglishmovies.sort_values('vote_weighted', ascending=False, inplace=True)
 plt.figure(figsize=(12,4))
@@ -148,9 +143,7 @@ plt.gca().invert_yaxis()  #flip to horizontal bars instead of vertical
 plt.xlabel("Weighted votes")
 plt.title("Non-english movies as per weighted votes")
 plt.show()
-
-#print(df_notenglishmovies['original_title'])
-
+#5.7 chart on top 6 by Revenue
 revenue = df_movies2.sort_values('revenue', ascending=False)
 plt.figure(figsize=(12,4))
 plt.barh(revenue['title'].head(6), revenue['revenue'].head(6), align='center', color='blue')
@@ -158,17 +151,39 @@ plt.gca().invert_yaxis()
 plt.xlabel("Revenue ($)")
 plt.title("Highest revenue movies")
 plt.show()
-
-# 5.5 Which movies have biggest difference weighted/non-weighted
-# calculate weighting, add to df
+# 5.8 Which movies have biggest difference weighted/non-weighted
+# calculate delta avg to weighted vote, add to df
 df_movies2['delta'] = abs(df_movies2['vote_average'] - df_movies2['vote_weighted'])
-#sort
 df_movies2.sort_values('delta', ascending=False, inplace=True)
+print('movies with biggest delta weighted-unweighted rating:')
 print(df_movies2[['title','delta', 'vote_weighted','vote_average','vote_count']].to_string(index=False,max_rows=10))
 
-#df_movies2.sort_values('vote_weighted', ascending=False, inplace=True)
-#print(df_movies2[['title','delta', 'vote_weighted','vote_average','vote_count']].to_string(index=False,max_rows=10))
+# 5.9 plot weighted rating per year by extractng year from Release Data
+df_movies2.dropna(subset=["release_date"], axis = 0 , inplace= True)
+df_movies2['year'] = df_movies2['release_date'].str.extract(r'(\d{4})')
+sns.stripplot(y="vote_average", x="year", data=df_movies2, jitter=1)
+plt.xlabel("Release year")
+plt.ylabel("Movie rating")
+plt.title("Ratings per year")
+plt.show()
 
+# 5.10 By year was useless, do converting to Decade
+# .. which took a long time to work out!
+
+# convert from dtype object to integer
+df_movies2['year'] = df_movies2['year'].astype(int)
+# do integer-divide * 10 logic to effectively '0' last year-digit and get the decade
+df_movies2['decade']= (((df_movies2['year'])//10)*10)
+#print(df_movies2['decade'])
+
+# plot on stripplot, which looks good
+sns.stripplot(y="vote_average", x="decade", data=df_movies2, jitter=1)
+plt.xlabel("Release decade")
+plt.ylabel("Movie rating - weighted")
+plt.title("Ratings per decade")
+plt.show()
+
+#print(df_movies2['title'].loc[df_movies2['decade'] == 1920])
 
 ### the difficult bit #####
 # Making recommendations, based on movie descriptions and other info
@@ -178,7 +193,7 @@ print(df_movies2[['title','delta', 'vote_weighted','vote_average','vote_count']]
 # End goal: to create a function that leverage a model to make a top 5 recommendation on which movies
 # are similar to the one used as input#
 
-# Note: using the original df with all ~5000 movies, regardless of number of votes.
+# Note: using the original file content with all ~5000 movies, regardless of number of votes.
 
 # STEP 1: Calculate tf-idf: this transforms words to vectors to be used for comparisons
 # similar to how parts of images or sounds are translated to vectors for digital comparisons
@@ -226,6 +241,9 @@ def get_similar(title, cosine_sim=cosine_sim):
     # Return the top 5 most similar movies
     return df_movies['title'].iloc[movie_indices]
 
-
+print('')
+print('Recommendations based on movie: ' + movie_title)
 print(get_similar(movie_title))
-
+print('')
+print('**************************************************************')
+print( "                   THE END      ")
