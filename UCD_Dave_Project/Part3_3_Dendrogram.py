@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
 
-# set Number of standarddeviations for taking outliers
+# set number of standard deviations for taking outliers
 nrstd = 2  #default is 3, but trying different values.
 
 # note 1, the basic dataset evaluation is done in the Part1_1_Load_ExploreData.py
@@ -45,7 +45,8 @@ selection_array = df_selection50.to_numpy()
 
 ## create hierarchical cluster
 # Calculate the linkage: mergings
-mergings = linkage(selection_array, method='complete')
+#mergings = linkage(selection_array, method='complete')
+mergings = linkage(selection_array, method='single')
 
 #print('calculated mergings')
 
