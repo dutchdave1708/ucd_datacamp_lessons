@@ -12,11 +12,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
-from matplotlib.colors import ListedColormap
-from sklearn.metrics import plot_confusion_matrix
-#from scipy.stats import norm, boxcox
-#from collections import Counter
-#from scipy import stats
+#from sklearn.metrics import plot_confusion_matrix
+
 # import dataset
 recipes = dave.read_intodataframe('Data_files/epi_r.csv')
 recipes = recipes.drop_duplicates('title', ignore_index=True)  # to reset index 0 to n-1
@@ -38,10 +35,11 @@ recipes['isdrink'] = np.where((recipes['drinks'] == 0.0) & (recipes['drink'] == 
 recipes = recipes.drop(columns=['drinks', 'drink'])
 
 print(recipes['title'].loc[recipes['isdrink'] == 1])
-# about 680 drinks recipes
+# about 690 drinks recipes
 
-print(recipes.head(10))
-print(recipes.describe())
+#print(recipes.head(10))
+#print(recipes.describe())
+
 ## data ready for the Machine learning part: how best to create the best model to predict if new recipe is a drink or not
 
 # too many columns to do a correlation map
@@ -145,8 +143,8 @@ def predictor(predictor, params):
   #  plot_confusion_matrix(classifier, X_test, y_test, cmap="pink")
     print('True positives :', cm[0][0])
     print('False positives :', cm[0][1])
-    print('False pegatives :', cm[1][0])
-    print('True pegatives :', cm[0][1], '\n')
+    print('False negatives :', cm[1][0])
+    print('True negatives :', cm[0][1], '\n')
 
     #print('Classification Report')
     #print(classification_report(y_test, y_pred,target_names=['0', '1'], zero_division=1))
@@ -158,17 +156,17 @@ def predictor(predictor, params):
     accuracy_scores[classifier] = accuracy * 100
 
     ## commented out because takes TOO long to run ##
-    # print('Applying K-Fold Cross validation')
+    ## and I have evinced this learning in file 1_4 ##
+    # print('do K-Fold cross validation')
     # from sklearn.model_selection import cross_val_score
-    # accuracies = cross_val_score(estimator=classifier, X=X_train, y=y_train, cv=10)
-    # print("Accuracy: {:.2f} %".format(accuracies.mean() * 100))
+    # accuracies = cross_val_score(estimator=classifier, X=X_train, y=y_train, cv=5)
+    # print("accuracy: {:.2f} %".format(accuracies.mean() * 100))
     # accuracy_scores[classifier] = accuracies.mean() * 100
-    # print("Standard Deviation: {:.2f} %".format(accuracies.std() * 100), '\n')
 
+# Now run a few different classifiers
+# and append the accuracy score to the accuracy_scores list
+# we can then compare which one is most accurate
 
-# Now run a few different models
-# and append the Accuracy score to the accuracy_scores list
-# we can then later compare which one is most accurate
 # 1. Logistic Regression
 print('FIRST CLASSIFIER MODEL: LR')
 predictor('lr', {'penalty': 'l1', 'solver': 'liblinear'})
@@ -192,7 +190,7 @@ print('SEVENTH MODEL: Random Forrest')
 predictor('rfc', {'criterion': 'gini', 'max_features': 'log2', 'n_estimators': 100,'random_state':0})
 
 
-# Which Classifier as best accuracy
+# which Classifier has the best accuracy
 maxKey = max(accuracy_scores, key=lambda x: accuracy_scores[x])
 print('The model with highest accuracy score is  {0} with an accuracy of  {1:.2f}'.format(maxKey, accuracy_scores[maxKey]))
 
@@ -201,6 +199,7 @@ plt.figure(figsize=(12, 6))
 model_accuracies = list(accuracy_scores.values())
 model_names = ['LogisticRegression', 'SVC',
                'K-SVC', 'KNN', 'Decisiontree', 'NBayes', 'RandomForest']
-sns.barplot(x=model_accuracies, y=model_names, palette='mako')
+sns.barplot(x=model_accuracies, y=model_names, palette='YlGn')
+plt.title('Accuracy scores per model')
 plt.show()
 
