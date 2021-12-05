@@ -168,17 +168,18 @@ def predictor(predictor, params):
 # we can then compare which one is most accurate
 
 # 1. Logistic Regression
+# NOTE: used the scikit-learn.org site to review parameter values and try different ones
 print('FIRST CLASSIFIER MODEL: LR')
-predictor('lr', {'penalty': 'l1', 'solver': 'liblinear'})
+predictor('lr', {'penalty': 'l2', 'solver': 'sag'})#tried L1&liblinear // l2 & sag
 # 2. SVM kernel = linear
 print('SECOND CLASSIFIER MODEL: SVM-1')
-predictor('svm', {'C': .5, 'gamma': 0.8, 'kernel': 'linear', 'random_state': 0})
+predictor('svm', {'C': 1, 'gamma': 0.8, 'kernel': 'linear', 'random_state': 0}) #C default is 1
 # 3. SVM kernel = rbf
 print('THIRD CLASSIFIER MODEL: SVM-2')
-predictor('svm', {'C': .25, 'gamma': 0.1, 'kernel': 'rbf', 'random_state': 0})
+predictor('svm', {'C': .25, 'gamma': 'scale', 'kernel': 'rbf', 'random_state': 0})
 # 4. KNN
 print('FOURTH CLASSIFIER MODEL: KNN')
-predictor('knn', {'algorithm': 'auto', 'n_jobs': 1, 'n_neighbors': 8, 'weights': 'distance'})
+predictor('knn', {'algorithm': 'auto', 'n_jobs': 1, 'n_neighbors': 5, 'weights': 'uniform'}) #tried different parameters
 # 5. Decision tree
 print('FIFTH MODEL: DT')
 predictor('dt', {'criterion': 'entropy', 'max_features': 'auto', 'splitter': 'best', 'random_state': 0})
@@ -197,9 +198,11 @@ print('The model with highest accuracy score is  {0} with an accuracy of  {1:.2f
 # Create chart for accuracy of the classifiers
 plt.figure(figsize=(12, 6))
 model_accuracies = list(accuracy_scores.values())
-model_names = ['LogisticRegression', 'SVC',
-               'K-SVC', 'KNN', 'Decisiontree', 'NBayes', 'RandomForest']
+model_names = ['LogisticRegression', 'SVC', 'K-SVC', 'KNN', 'Decisiontree', 'NBayes', 'RandomForest']
 sns.barplot(x=model_accuracies, y=model_names, palette='YlGn')
 plt.title('Accuracy scores per model')
 plt.show()
+
+## NOTE: all accuracy scores are really high, no room to explore hyperparameter tuning here.
+# Unless I remove columns from the dataset to bring accuracy scores down.
 
