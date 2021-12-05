@@ -13,7 +13,8 @@ from sklearn.model_selection import train_test_split, GridSearchCV, RepeatedStra
 import warnings
 
 # surpress warnings, as too many 'deprecated' warnings when running this
-warnings.filterwarnings('ignore')
+warnings.simplefilter("ignore", category=DeprecationWarning)
+
 # read the csv
 df = pd.read_csv('Data_files/epi_r.csv')
 # set Number of standarddeviations for taking outliers
@@ -57,7 +58,7 @@ space = dict()
 space['solver']=['svd','cholesky', 'lsqr', 'sag', 'saga', 'lbfgs']
 space['alpha']= [1e5,1e4,1e3,1e2,1e1,1,10,100]
 space['fit_intercept']=[True, False]
-space['normalize']=[True, False]
+
 # for a regression problem, recommended to use RepeatedKFold
 cv = RepeatedKFold(n_splits=10, n_repeats=3, random_state=1)
 #alternative also used: cv = RepeatedStratifiedKFold(n_splits=10, n_repeats=3, random_state=1)
