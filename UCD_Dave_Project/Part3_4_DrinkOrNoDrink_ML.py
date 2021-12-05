@@ -18,8 +18,8 @@ import seaborn as sns
 recipes = dave.read_intodataframe('Data_files/epi_r.csv')
 recipes = recipes.drop_duplicates('title', ignore_index=True)  # to reset index 0 to n-1
 
-# show columns
-# dave.df_showcolumns(recipes)
+#show columns
+#dave.df_showcolumns(recipes)
 
 # remove all Nulls
 recipes = dave.df_removeNulls(recipes)
@@ -43,7 +43,7 @@ print(recipes['title'].loc[recipes['isdrink'] == 1])
 ## data ready for the Machine learning part: how best to create the best model to predict if new recipe is a drink or not
 
 # too many columns to do a correlation map
-# too many colkumns for box plot charts
+# too many columns for box plot charts
 # get skew results from columns
 # Skewness is a measure of the asymmetry of the probability distribution
 # of variable about its mean.
@@ -54,13 +54,13 @@ print(recipes.skew(axis=0))
 
 titles = recipes['title']
 recipes = recipes.drop(columns=['title'])
-print(' column title is dropped ')
+#print(' column title is dropped ')
 # set target & features, train & test data
 X = recipes[recipes.columns[0:-1]].to_numpy()  # all columns except isdrink
 y = recipes[recipes.columns[-1]].to_numpy()  # the target isdrink column only
 
-print(X.shape)  # should be 677 columns  (680 - 2 drinks dropped - 1 target)
-print(y.shape)  # should be only 1 column
+#print(X.shape)  # should be 677 columns  (680 - 2 drinks dropped - 1 target)
+#print(y.shape)  # should be only 1 column
 
 # split data into train and test sets.
 # Q: Why is random seed set to 42?
@@ -68,7 +68,7 @@ print(y.shape)  # should be only 1 column
 # from The Hitchhiker's Guide to the Galaxy.
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
-print('test & train dataset assigned, now doing standard scaler')
+#print('test & train dataset assigned, now doing standard scaler')
 
 #use StandardScaler to scale to unit variance.
 # Reason: Standardization of a dataset is a common requirement for many machine learning estimators:
@@ -155,7 +155,7 @@ def predictor(predictor, params):
 # add to dictionary
     accuracy_scores[classifier] = accuracy * 100
 
-    ## commented out because takes TOO long to run ##
+    ## commented out because takes too long to run every time##
     ## and I have evinced this learning in file 1_4 ##
     # print('do K-Fold cross validation')
     # from sklearn.model_selection import cross_val_score
@@ -204,5 +204,4 @@ plt.title('Accuracy scores per model')
 plt.show()
 
 ## NOTE: all accuracy scores are really high, no room to explore hyperparameter tuning here.
-# Unless I remove columns from the dataset to bring accuracy scores down.
 

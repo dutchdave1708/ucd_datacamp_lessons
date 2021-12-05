@@ -5,6 +5,9 @@
 # Hence going back to Regression logic in Part1_4.
 
 # import the relevant packages
+# some packages used in previous runs of this scripts,
+# so un-used now, means used previously or in now-commented-out code.
+
 import pandas as pd
 import numpy as np
 from sklearn.linear_model import Ridge, LinearRegression
